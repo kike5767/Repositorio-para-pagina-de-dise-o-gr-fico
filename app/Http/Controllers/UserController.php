@@ -1,3 +1,5 @@
+# Improved code with comments and commits
+
 <?php
 
 namespace App\Http\Controllers;
@@ -6,8 +8,6 @@ use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
-use function PHPUnit\Framework\returnSelf;
 
 class UserController extends Controller
 {
@@ -18,7 +18,6 @@ class UserController extends Controller
     {
         $usuarios = User::all();
         return view('users.index', ['usuarios'=> $usuarios]);
-
     }
 
     /**
@@ -26,7 +25,6 @@ class UserController extends Controller
      */
     public function create()
     {
-
         return view('users.create', ['roles' => Roles::all()]);
     }
 
@@ -35,13 +33,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request -> validate([
+        $request->validate([
             'name' => 'nullable|max:45',
             'username' => 'required|max:45',
             'password' => 'required|confirmed',
             'email' => 'required|email|confirmed|max:255',
-
-
         ]);
 
         $user = new User();
@@ -49,11 +45,10 @@ class UserController extends Controller
         $user->username = $request->input('username');
         $user->password = Hash::make($request->input('password'));
         $user->email = $request->input('email');
-        $user->tipo = $request ->input('rol');
+        $user->tipo = $request->input('rol');
         $user->save();
 
         return view('users.message', ['msg' => "REGISTRO GUARDADO"]);
-
     }
 
     /**
@@ -61,7 +56,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        // No implementation for show method
     }
 
     /**
@@ -78,13 +73,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request -> validate([
+        $request->validate([
             'name' => 'nullable|max:45',
             'username' => 'required|max:45',
             'password' => 'required|confirmed',
             'email' => 'required|email|confirmed|max:255',
-            'rol' => 'required'
-
+            'rol' => 'required',
         ]);
 
         $user = User::find($id);
@@ -98,11 +92,10 @@ class UserController extends Controller
 
             return view('users.message', ['msg' => "REGISTRO GUARDADO"]);
         } else {
-            // Maneja el caso en que el usuario no existe
+            // Handle the case where the user does not exist
             return view('users.message', ['msg' => "USUARIO NO ENCONTRADO"]);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -110,7 +103,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        $user ->delete();
+        $user->delete();
 
         return redirect('users');
     }
